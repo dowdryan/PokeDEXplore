@@ -1,0 +1,34 @@
+.Pokemon-Info {
+    margin-left: 200px;
+    margin-right: 200px;
+    /* border: 2px solid black; */
+}
+
+.Pokemon-Name, .Pokemon-Class {
+    text-align: center;
+}
+
+.Pokemon-Class {
+    margin-top: -10px;
+}
+
+/* .Pokemon-Sprite {
+    display: 'block',;
+    margin: 'auto';
+    width: '15%';
+    height: '15%';
+    border: '4px solid #000';
+    border-radius: '15px';
+} */
+
+/* .Pokemon-Description {
+    text-align: 'center';
+    border: '2px solid black';
+    border-radius: '15px';
+    padding: '10px';
+    margin: '10px';
+} */
+
+.next-link {
+    float: right; /* This will push the "Next" link to the right */
+}
