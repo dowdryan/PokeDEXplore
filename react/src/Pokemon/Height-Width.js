@@ -1,5 +1,5 @@
 import React from 'react';
-import FetchPokemonData from '../Data/fetchPokemonData';
+import FetchPokemonData from './Data/fetchPokemonData';
 
 // Returns the pokemon's height and width
 function HeightWidth({ pokemon }) {

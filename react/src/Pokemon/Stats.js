@@ -1,5 +1,5 @@
 import React from "react";
-import FetchPokemonData from "../Data/fetchPokemonData";
+import FetchPokemonData from "./Data/fetchPokemonData";
 import "./Stats.css"
 
 // Gets the pokemon's stats

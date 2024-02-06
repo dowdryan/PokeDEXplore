@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Helpers from '../Helpers/Helpers';
-import FetchPokemonData from '../Data/fetchPokemonData';
+import FetchPokemonData from './Data/fetchPokemonData';
 import axios from 'axios';
 
 // Lists all available evolutions for a pokemon

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Helpers from '../Helpers/Helpers';
-import FetchPokemonData from '../Data/fetchPokemonData';
+import FetchPokemonData from './Data/fetchPokemonData';
 
 // Gets the pokemon's type(s)
 function Types({ pokemon }) {

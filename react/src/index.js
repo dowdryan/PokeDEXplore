@@ -4,13 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// const header = ReactDOM.createRoot(document.getElementById('header'));
-// root.render(
-//   <React.StrictMode>
-//     <Header />
-//   </React.StrictMode>
-// );
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

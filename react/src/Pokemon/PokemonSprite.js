@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {useParams } from 'react-router-dom';
 import axios from 'axios';
 import Helpers from '../Helpers/Helpers';
-import FetchPokemonData from '../Data/fetchPokemonData';
+import FetchPokemonData from './Data/fetchPokemonData';
 import "./PokemonSprite.css"
 import unknownIcon from "../unknownIcon.png"
 import { fetchFormSpriteUrl, fetchPokemonForms } from './Forms';
