@@ -53,6 +53,15 @@ function PokemonSprite({ pokemon }) {
 
     return (
         <div className='Pokemon-Sprite' style={{ position: 'relative' }}>
+            {/* <input type="checkbox" id="star" style={{
+                visibility: "visible",
+                fontSize: "30px",
+                cursor: "pointer",
+                color: "red",
+                position: "absolute",
+                top: "1px",
+                left: "645px"
+            }}/> */}
             {pokemonData && (
                 <div>
                     <img className='Pokemon-Sprite'

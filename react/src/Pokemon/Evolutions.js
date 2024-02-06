@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Helpers from '../Helpers/Helpers';
 import FetchPokemonData from './Data/fetchPokemonData';
 import axios from 'axios';
@@ -40,6 +41,10 @@ function Evolutions({ pokemon }) {
     fetchData();
   }, [pokemon]);
 
+  const handleClick = () => {
+    window.scrollTo(0, 0);
+  };
+
   if (!evolutionChain) {
     return <div>Loading...</div>;
   }
@@ -54,7 +59,7 @@ function Evolutions({ pokemon }) {
         <ul>
           {evolutionChain.map((evolution, index) => (
             <li key={index}>
-              {evolution}
+              <Link to={`/${evolution}`} onClick={handleClick}>{evolution}</Link>
             </li>
           ))}
         </ul>

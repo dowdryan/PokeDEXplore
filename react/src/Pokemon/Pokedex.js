@@ -4,12 +4,13 @@ import Helpers from '../Helpers/Helpers';
 import axios from 'axios';
 import unknownIcon from "../unknownIcon.png"
 
-// Acts as the homepage and lists all avaiable pokemon (as of Jan. 2024)
 function Pokedex() {
     const [pokemonList, setPokemonList] = useState([]);
     const [sortOption, setSortOption] = useState('Ascending');
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestedPokemon, setSuggestedPokemon] = useState([]);
+    const [hoveredPokemon, setHoveredPokemon] = useState(null);
+    const [clickedPokemon, setClickedPokemon] = useState(null); // State to track clicked link
     const { CapitalizePokemonWithHyphen } = Helpers;
 
     const getPokemonId = (url) => {
@@ -36,10 +37,9 @@ function Pokedex() {
             }
         };
         fetchData();
-    }, [sortOption]); // Update the list when sortOption changes
+    }, [sortOption]);
 
     const handleSearch = () => {
-        // Redirect to the page of the first matching Pokemon
         const matchingPokemon = pokemonList.find(
             (pokemon) => pokemon.name.toLowerCase() === searchTerm.toLowerCase()
         );
@@ -54,11 +54,20 @@ function Pokedex() {
         const filteredPokemon = pokemonList.filter(pokemon =>
             pokemon.name.toLowerCase().startsWith(input.toLowerCase())
         );
-
-        // Limit the suggestions to the first 10
         setSuggestedPokemon(filteredPokemon.slice(0, 10));
     };
-    
+
+    const handleMouseEnter = (pokemonName) => {
+        setHoveredPokemon(pokemonName);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredPokemon(null);
+    };
+
+    const handleClick = (pokemonName) => {
+        setClickedPokemon(pokemonName);
+    };
 
     return (
         <div>
@@ -75,7 +84,6 @@ function Pokedex() {
                 <option value="ReverseAlphabetically">Reverse Alphabetically</option>
             </select>
 
-            {/* Search Bar */}
             <div style={{ position: 'relative', margin: '10px' }}>
                 <input
                     type="text"
@@ -88,8 +96,6 @@ function Pokedex() {
                     style={{ marginRight: '5px' }}
                 />
                 <button onClick={handleSearch}>Search</button>
-
-                {/* Autocomplete Dropdown */}
                 {suggestedPokemon.length > 0 && (
                     <ul style={{
                             listStyle: 'none',
@@ -115,78 +121,80 @@ function Pokedex() {
                     </ul>
                 )}
 
-                <Link to="/favorites">Favorites</Link>
-
+                {/* <Link to="/favorites">Favorites</Link> */}
             </div>
 
-            <div style={styles.pokemonList}>
-                {pokemonList.map((pokemon) => (
-                    <div key={pokemon.name} style={styles.pokemonItem}>
-                        <a href={`/${pokemon.name}`}>
-                            <img
-                                src={`https://projectpokemon.org/images/sprites-models/sv-sprites-home/${getPokemonId(pokemon.url)}.png`}
-                                alt={`${getPokemonId(pokemon.url)}`}
-                                style={{
-                                    maxWidth: '120px',
-                                    maxHeight: '120px',
-                                    marginTop: "5px",
-                                    marginLeft: "7px",
-                                    marginRight: "10px",
-                                    backgroundColor: "#b2b2b2",
-                                    border: "6px solid #999999",
-                                    borderRadius: "20%"
-                                }}
-                                onError={(e) => {
-                                    e.target.src = unknownIcon;
-                                    console.error('Image failed to load, using unknownIcon:', e);
-                                }}
-                            />
-                        </a>
-                        <Link to={`/${pokemon.name}`} style={{
-                            color: '#fff',
-                            WebkitTapHighlightColor: 'transparent',
-                            textDecoration: "none",
-                            fontSize: "1.25rem",
-                            textAlign: "center",
-                            marginTop: "10px",
-                        }}>
-                            {CapitalizePokemonWithHyphen(pokemon.name)} (#{getPokemonId(pokemon.url)})
-                        </Link>
-                    </div>
-                ))}
+            <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                marginLeft: "80px",
+                marginRight: "80px",
+                backgroundColor: "#28282B",
+                border: "10px solid black",
+                borderRadius: "0.3%",
+                marginBottom: "40px",}}>
+                {pokemonList.map((pokemon) => {
+                    const itemStyles = {
+                        width: '30%',
+                        margin: '10px',
+                        boxSizing: 'border-box',
+                        backgroundColor: "gray",
+                        border: `3px solid ${clickedPokemon === pokemon.name ? '#003366' : (hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB')}`, // Change border color when clicked
+                        borderRadius: "5%",
+                        boxShadow: '10px 10px 0 rgba(40, 40, 43, 0.7)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        transition: 'border-color 0.3s ease-in-out, border-width 0.3s ease-in-out, margin 0.3s ease-in-out', // added margin transition
+                    };
+                    const hoveredStyles = {
+                        border: `6px solid ${hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB'}`, // double border size when hovered
+                        margin: hoveredPokemon === pokemon.name ? '7px' : '10px', // set margin to 7 during hover, otherwise 10
+                    };
+
+                    return (
+                        <div key={pokemon.name} style={{ 
+                            ...itemStyles, 
+                            ...(hoveredPokemon === pokemon.name && hoveredStyles) }} 
+                            onMouseEnter={() => handleMouseEnter(pokemon.name)} 
+                            onMouseLeave={handleMouseLeave}>
+                            <a href={`/${pokemon.name}`} onClick={() => handleClick(pokemon.name)}>
+                                <img
+                                    src={`https://projectpokemon.org/images/sprites-models/sv-sprites-home/${getPokemonId(pokemon.url)}.png`}
+                                    alt={`${getPokemonId(pokemon.url)}`}
+                                    style={{
+                                        maxWidth: '120px',
+                                        maxHeight: '120px',
+                                        marginTop: "5px",
+                                        marginLeft: "7px",
+                                        marginRight: "10px",
+                                        backgroundColor: "#b2b2b2",
+                                        border: "6px solid #999999",
+                                        borderRadius: "20%"
+                                    }}
+                                    onError={(e) => {
+                                        e.target.src = unknownIcon;
+                                        console.error('Image failed to load, using unknownIcon:', e);
+                                    }}
+                                />
+                            </a>
+                            <Link to={`/${pokemon.name}`} style={{
+                                color: '#fff',
+                                WebkitTapHighlightColor: 'transparent',
+                                textDecoration: "none",
+                                fontSize: "1.25rem",
+                                textAlign: "center",
+                                marginTop: "10px",
+                            }}>
+                                {CapitalizePokemonWithHyphen(pokemon.name)} (#{getPokemonId(pokemon.url)})
+                            </Link>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
 }
-
-const styles = {
-    pokemonList: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginLeft: "75px",
-        marginRight: "50px",
-        backgroundColor: "#28282B",
-        border: "10px solid black",
-        borderRadius: "0.3%",
-        // marginTop: "40px",
-        marginBottom: "40px"
-    },
-    PokemonName: {
-        color: "#0088cc",
-    },
-    pokemonItem: {
-        width: '30%',
-        margin: '10px',
-        boxSizing: 'border-box',
-        backgroundColor: "gray",
-        border: "3px solid #a8a8aB",
-        borderRadius: "5%",
-        boxShadow: '10px 10px 0 rgba(40, 40, 43, 0.7)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-};
 
 export default Pokedex;

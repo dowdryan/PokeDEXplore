@@ -22,13 +22,23 @@
       text-decoration: none;
       color: white; /* Fix the color property */
       background-color: #333; /* Add background color to the header */
-      padding: 10px; /* Add padding for better styling */
+      padding: 10px 0px; /* Add padding for better styling */
       text-align: center; /* Center the text */
+      z-index: 9999;
     }
 
     #header a {
       text-decoration: none;
       color: white;
+    }
+    .sticky {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+
+    .sticky + .content {
+      padding-top: 102px;
     }
   </style>
 </head>
@@ -37,7 +47,24 @@
     <a href="/">
       <h1>PokéDEXplore</h1>
     </a>
+    <a href="/favorites">
+      <p>Favorites</p>
+    </a>
   </header>
   <div id="root"></div>
+  <script>
+    window.onscroll = function() {myFunction()};
+
+    var header = document.getElementById("header");
+    var sticky = header.offsetTop;
+
+    function myFunction() {
+      if (window.pageYOffset > sticky) {
+        header.classList.add("sticky");
+      } else {
+        header.classList.remove("sticky");
+      }
+    }
+  </script>
 </body>
 </html>

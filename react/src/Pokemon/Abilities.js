@@ -37,6 +37,10 @@ function Abilities() {
                     margin: '0 auto',
                     width: 'fit-content',
                     marginBottom: "5px",
+                    backgroundColor: "white",
+                    color: "black",
+                    border: '4px solid black',
+                    borderRadius: '10px',
                 }}>
                     {pokemonData.abilities
                         .filter((ability) => !ability.is_hidden && ability.slot !== 3)
@@ -56,6 +60,10 @@ function Abilities() {
                     margin: '5px auto',
                     width: 'fit-content',
                     marginBottom: "5px",
+                    backgroundColor: "white",
+                    color: "black",
+                    border: '4px solid black',
+                    borderRadius: '10px',
                 }}>{hiddenAbility}</p>)}</>
             )}
         </div>

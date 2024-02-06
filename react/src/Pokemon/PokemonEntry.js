@@ -14,14 +14,14 @@ import MiscInfo from './miscInfo';
 import axios from 'axios';
 import "./PokemonEntry.css"
 
-// 
 function PokemonEntry() {
   const { name } = useParams();
   const { CapitalizePokemonWithHyphen } = Helpers;
   const [pokemonData, setPokemonData] = useState(null);
   const [speciesData, setSpeciesData] = useState(null);
   const [hiddenAbility, setHiddenAbility] = useState(null);
-  const [userFavorites, setUserFavorites] = useState([]); // State to hold user favorites
+  const [userFavorites, setUserFavorites] = useState([]);
+  const [loading, setLoading] = useState(true); // State to indicate loading state
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -32,6 +32,7 @@ function PokemonEntry() {
           .filter((ability) => ability.is_hidden)
           .map((ability) => CapitalizePokemonWithHyphen(ability.ability.name.replace(/-/g, ' ')))
           .join(', '))
+        setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error('Error fetching Pokemon data:', error);
       }
@@ -52,7 +53,6 @@ function PokemonEntry() {
   }, [name]);
 
   useEffect(() => {
-    // Fetch user favorites when the component mounts
     const fetchUserFavorites = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/user-favorites');
@@ -67,15 +67,12 @@ function PokemonEntry() {
 
   const handleFavoriteToggle = async (id, name) => {
     try {
-      // Check if the Pokémon id is already a favorite
       const isFavorite = userFavorites.some((favorite) => favorite.id === id);
   
       if (!isFavorite) {
-        // If not, add it to favorites
         await axios.post('http://localhost:5000/api/add-favorite', { id, name });
         setUserFavorites([...userFavorites, { id, name }]);
       } else {
-        // If it is, remove it from favorites
         await axios.post('http://localhost:5000/api/remove-favorite', { id });
         setUserFavorites(userFavorites.filter((favorite) => favorite.id !== id));
       }
@@ -93,34 +90,36 @@ function PokemonEntry() {
       marginTop: "40px",
       marginBottom: "120px"
     }}>
-      {pokemonData && (
+      {loading ? ( // Check if loading state is true
+        <div className="loading-circle">Loading...</div> // Render loading circle if loading
+      ) : (
         <>
-        <div className='Pokemon-Prev-Next'>
-          {pokemonData.id > 1 && (
-            <Link to={`/${pokemonData.id - 1}`} style={{
-              marginLeft: "30px",
-              fontSize: "20px",
-              textDecoration: "none",
-              color: "white",
-            }}>&lt;({pokemonData.id - 1}) Previous</Link>
-          )}
-          {pokemonData.id < 1025 && (
-            <Link to={`/${pokemonData.id + 1}`} className="next-link" style={{
-              marginRight: "30px",
-              fontSize: "20px",
-              textDecoration: "none",
-              color: "white",
-            }}>Next ({pokemonData.id + 1})&gt;</Link>
-          )}
-          <label>
-  Favorite {pokemonData.id}
-  <input
-    type="checkbox"
-    checked={userFavorites.some((favorite) => favorite.id === pokemonData.id)}
-    onChange={() => handleFavoriteToggle(pokemonData.id, pokemonData.name)}
-  />
-</label>
-        </div>
+          <div className='Pokemon-Prev-Next'>
+            {pokemonData.id > 1 && (
+              <Link to={`/${pokemonData.id - 1}`} style={{
+                marginLeft: "30px",
+                fontSize: "20px",
+                textDecoration: "none",
+                color: "white",
+              }}>&lt;({pokemonData.id - 1}) Previous</Link>
+            )}
+            {pokemonData.id < 1025 && (
+              <Link to={`/${pokemonData.id + 1}`} className="next-link" style={{
+                marginRight: "30px",
+                fontSize: "20px",
+                textDecoration: "none",
+                color: "white",
+              }}>Next ({pokemonData.id + 1})&gt;</Link>
+            )}
+            <label>
+              Favorite {pokemonData.id}
+              <input
+                type="checkbox"
+                checked={userFavorites.some((favorite) => favorite.id === pokemonData.id)}
+                onChange={() => handleFavoriteToggle(pokemonData.id, pokemonData.name)}
+              />
+            </label>
+          </div>
           <PokemonName pokemon={pokemonData.id}/>
           <PokemonSprite pokemon={pokemonData.id}/>
           <Types pokemon={pokemonData.id}/>
