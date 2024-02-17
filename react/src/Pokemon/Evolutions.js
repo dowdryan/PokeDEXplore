@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize, 
+  CapitalizeHyphen, 
+  CapitalizeWordsRemoveHyphen, 
+  CapitalizePokemonWithHyphen 
+ } from '../Helpers/Helpers';
 import FetchPokemonData from './Data/fetchPokemonData';
 import axios from 'axios';
 
-// Lists all available evolutions for a pokemon
+
+// Lists and renders all available evolutions for a pokemon
 function Evolutions({ pokemon }) {
   const pokemonData = FetchPokemonData(pokemon);
-  const { CapitalizePokemonWithHyphen } = Helpers;
   const [evolutionChain, setEvolutionChain] = useState(null);
 
   useEffect(() => {
@@ -50,7 +54,7 @@ function Evolutions({ pokemon }) {
   }
 
   return (
-    <div>
+    <div style={{textAlign: "center"}}>
       <hr></hr>
       <h3>Evolutions:</h3>
       {evolutionChain.length === 1 ? (
@@ -58,9 +62,9 @@ function Evolutions({ pokemon }) {
       ) : (
         <ul>
           {evolutionChain.map((evolution, index) => (
-            <li key={index}>
-              <Link to={`/${evolution}`} onClick={handleClick}>{evolution}</Link>
-            </li>
+            <p key={index}>
+              <Link to={`/${evolution}`} onClick={handleClick} style={{textDecoration: "none"}}>{evolution}</Link>
+            </p>
           ))}
         </ul>
       )}

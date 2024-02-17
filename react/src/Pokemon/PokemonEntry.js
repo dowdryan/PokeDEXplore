@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize, 
+  CapitalizeHyphen, 
+  CapitalizeWordsRemoveHyphen, 
+  CapitalizePokemonWithHyphen 
+ } from '../Helpers/Helpers';
 import PokemonName from './PokemonName'
 import PokemonSprite from './PokemonSprite'
 import PokemonDesc from './PokemonDesc';
 import HeightWidth from './Height-Width';
-import Abilities from './Abilities';
+import { Abilities } from './Abilities';
 import Types from "./Types"
 import Stats from './Stats';
 import Learnset from './Learnset';
@@ -16,13 +20,17 @@ import "./PokemonEntry.css"
 
 function PokemonEntry() {
   const { name } = useParams();
-  const { CapitalizePokemonWithHyphen } = Helpers;
+  // const { CapitalizePokemonWithHyphen } = Helpers;
   const [pokemonData, setPokemonData] = useState(null);
   const [speciesData, setSpeciesData] = useState(null);
   const [hiddenAbility, setHiddenAbility] = useState(null);
   const [userFavorites, setUserFavorites] = useState([]);
   const [loading, setLoading] = useState(true); // State to indicate loading state
 
+
+  /**
+   * DOCUMENT HERE
+   */
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
@@ -40,6 +48,10 @@ function PokemonEntry() {
     fetchPokemonData();
   }, [name]);
 
+
+  /**
+   * DOCUMENT HERE
+   */
   useEffect(() => {
     const fetchSpeciesData = async () => {
       try {
@@ -52,6 +64,10 @@ function PokemonEntry() {
     fetchSpeciesData();
   }, [name]);
 
+
+  /**
+   * Fetches all of the user's favorited pokemon
+   */
   useEffect(() => {
     const fetchUserFavorites = async () => {
       try {
@@ -61,10 +77,13 @@ function PokemonEntry() {
         console.error('Error fetching user favorites:', error);
       }
     };
-
     fetchUserFavorites();
   }, []);
 
+
+  /**
+   * Used to add/remove favorites
+   */
   const handleFavoriteToggle = async (id, name) => {
     try {
       const isFavorite = userFavorites.some((favorite) => favorite.id === id);
@@ -81,6 +100,7 @@ function PokemonEntry() {
     }
   };
 
+
   return (
     <div className='Pokemon-Info' style={{
       backgroundColor: "#28282B",
@@ -88,13 +108,14 @@ function PokemonEntry() {
       borderRadius: "5%",
       color: "#fff",
       marginTop: "40px",
-      marginBottom: "120px"
-    }}>
-      {loading ? ( // Check if loading state is true
-        <div className="loading-circle">Loading...</div> // Render loading circle if loading
+      marginBottom: "120px"}}>
+      {/* Loading Screen */}
+      {loading ? (
+        <div className="loading-circle">Loading...</div>
       ) : (
         <>
           <div className='Pokemon-Prev-Next'>
+            {/* Directs user to the previous pokemon */}
             {pokemonData.id > 1 && (
               <Link to={`/${pokemonData.id - 1}`} style={{
                 marginLeft: "30px",
@@ -103,6 +124,7 @@ function PokemonEntry() {
                 color: "white",
               }}>&lt;({pokemonData.id - 1}) Previous</Link>
             )}
+            {/* Directs user to the next pokemon */}
             {pokemonData.id < 1025 && (
               <Link to={`/${pokemonData.id + 1}`} className="next-link" style={{
                 marginRight: "30px",
@@ -111,6 +133,7 @@ function PokemonEntry() {
                 color: "white",
               }}>Next ({pokemonData.id + 1})&gt;</Link>
             )}
+            {/* Checkbox for favoriting a pokemon */}
             <label>
               Favorite {pokemonData.id}
               <input

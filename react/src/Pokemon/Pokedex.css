@@ -1,0 +1,71 @@
+.Search-Bar {
+    margin-top: 20px;
+    margin-right: 5px;
+    text-align: center;
+    border: 2.5px solid black;
+    border-radius: 5px;
+    width: 500px;
+    height: 25px;
+}
+
+.Search-Button {
+    width: 75px;
+    height: 31px;
+    border: 2.5px solid gray;
+    border-radius: 5px;
+}
+
+.Suggest-Search {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+#Sort, #Filter {
+    border: 1.5px solid black; 
+    border-radius: 4px;
+}
+
+
+
+.Pokemon-Container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 40px;
+    background-color: #28282B;
+    border: 10px solid black;
+    border-radius: 50px; /* Margin for top of page */
+    margin-bottom: 40px; /* Margin for bottom of page */
+}
+
+.Menu-Sprite {
+    max-width: 120px;
+    max-height: 120px;
+    margin-top: 9px;
+    margin-left: 7px;
+    margin-right: 10px;
+    background-color: #b2b2b2;
+    border: 6px solid #999999;
+    border-radius: 20%;
+}
+
+.Pokemon-Link {
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    font-size: 1.25rem;
+    text-align: center;
+    margin-top: 10px;
+}

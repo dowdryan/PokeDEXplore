@@ -12,13 +12,27 @@ const additionalExceptions = ['mr-mime', 'mime-jr', 'type-null',
 'raging-bolt', 'iron-leaves', 'iron-boulder', 'iron-crown'
 ];
 
+
+/**
+ * Searches for the given typo in a string and replaces it with the corrected version.
+ */
+function fixTypo(string, typo, fixedString) {
+    return string.replace(typo, fixedString);
+}
+
+
+/**
+ *  
+ */
 function Capitalize(str) {
-    if (typeof str !== 'string' || str === null) {
-        return ''; // Return an empty string if str is not a valid string
-    }
+    if (typeof str !== 'string' || str === null) return ''; // Return an empty string if str is not a valid string
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+
+/**
+ *  
+ */
 function CapitalizeHyphen(word) {
     // Fixes "Paladox Pokemon" typo.
     if (word.includes("Paladox")) {
@@ -30,6 +44,10 @@ function CapitalizeHyphen(word) {
         .join('-');
 }
 
+
+/**
+ *  
+ */
 function CapitalizeWordsRemoveHyphen(word) {
     return word
         .split('-')
@@ -37,6 +55,10 @@ function CapitalizeWordsRemoveHyphen(word) {
         .join(' ');
 }
 
+
+/**
+ *  
+ */
 function CapitalizePokemonWithHyphen(word) {
     if (word === 'nidoran-m') {
         const replacedWord = word.replace('m', '♂');
@@ -68,4 +90,10 @@ function CapitalizePokemonWithHyphen(word) {
         .join(' ');
 }
 
-export default {Capitalize, CapitalizeHyphen, CapitalizeWordsRemoveHyphen, CapitalizePokemonWithHyphen}
+
+export {
+    Capitalize, 
+    fixTypo,
+    CapitalizeHyphen, 
+    CapitalizeWordsRemoveHyphen, 
+    CapitalizePokemonWithHyphen}

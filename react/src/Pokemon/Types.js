@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize } from '../Helpers/Helpers';
 import FetchPokemonData from './Data/fetchPokemonData';
 
-// Gets the pokemon's type(s)
+// Gets and renders the pokemon's type(s)
 function Types({ pokemon }) {
-    const { Capitalize } = Helpers;
+    // console.log("ngiowougbuowbujofgbnouwjngoubwoujb")
     const pokemonData = FetchPokemonData(pokemon);
     const getTypeColor = (types) => {
         const typeColors = {
@@ -29,9 +29,12 @@ function Types({ pokemon }) {
         };
         return typeColors[types] || "#FFFFFF"; // Default to white if the type is not found
     };
+
+    // {console.log("jfiwhoufhouwhoufhouihuobh")}
+    // {console.log(pokemonData.types)}
     return (
         <div>
-            {pokemonData ? (
+            {pokemonData && (
                 <p className='Pokemon-Types' style={{ textAlign: 'center' }}>
                     {pokemonData.types.map((type, index) => (
                         <React.Fragment key={type.type.name}>
@@ -49,8 +52,6 @@ function Types({ pokemon }) {
                     </React.Fragment>
                     ))}
                 </p>
-            ) : (
-                <p>Loading...</p>
             )}
         </div>
     );

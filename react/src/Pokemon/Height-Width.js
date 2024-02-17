@@ -1,7 +1,7 @@
 import React from 'react';
 import FetchPokemonData from './Data/fetchPokemonData';
 
-// Returns the pokemon's height and width
+// Returns and renders the pokemon's height and width
 function HeightWidth({ pokemon }) {
     const pokemonData = FetchPokemonData(pokemon);
     return (
@@ -16,10 +16,14 @@ function HeightWidth({ pokemon }) {
                     padding: '0px 2px 0px',
                     margin: 'auto',
                     width: 'fit-content',
+                    backgroundColor: "white",
+                    color: "black",
+                    border: '4px solid black',
+                    borderRadius: '10px',
                 }}>
                     <p className='Pokemon-Height' style={{
                         marginRight: "10px",
-                    }}>{(pokemonData.height / 10).toFixed(1)}m</p>
+                    }}>{(pokemonData.height / 10).toFixed(1)}m |</p>
                     <p className='Pokemon-Weight'>{(pokemonData.weight / 10).toFixed(1)}kg</p>
                 </div>
             )}

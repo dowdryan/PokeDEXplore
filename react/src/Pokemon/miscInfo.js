@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize, 
+  CapitalizeHyphen, 
+  CapitalizeWordsRemoveHyphen, 
+  CapitalizePokemonWithHyphen 
+ } from '../Helpers/Helpers';
 import axios from 'axios';
 
 // Returns miscellaneous data about a pokemon, such as it's egg group, gender rate, etc. 
@@ -9,7 +13,7 @@ function MiscInfo() {
   const [speciesData, setSpeciesData] = useState(null);
   const [eggGroups, setEggGroups] = useState([]);
   const [loading, setLoading] = useState(true); // Introduce loading state
-  const { CapitalizeHyphen } = Helpers;
+  // const { CapitalizeHyphen } = Helpers;
 
   useEffect(() => {
     const fetchSpeciesData = async () => {

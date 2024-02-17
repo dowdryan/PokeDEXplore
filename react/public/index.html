@@ -9,6 +9,7 @@
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet" />
+  <link href="//fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
   <title>Pokédexplore</title>
   <style>
     body {
@@ -16,7 +17,6 @@
       margin: 0; /* Remove default margin */
       padding: 0; /* Remove default padding */
     }
-
     #header {
       font-family: "Pokemon-Solid", sans-serif;
       text-decoration: none;
@@ -25,8 +25,8 @@
       padding: 10px 0px; /* Add padding for better styling */
       text-align: center; /* Center the text */
       z-index: 9999;
+      border-bottom: 5px solid black;
     }
-
     #header a {
       text-decoration: none;
       color: white;
@@ -36,7 +36,6 @@
       top: 0;
       width: 100%;
     }
-
     .sticky + .content {
       padding-top: 102px;
     }
@@ -45,7 +44,7 @@
 <body>
   <header id="header">
     <a href="/">
-      <h1>PokéDEXplore</h1>
+      <h1 style="font-size: 40px;">PokéDEXplore</h1>
     </a>
     <a href="/favorites">
       <p>Favorites</p>
@@ -54,10 +53,8 @@
   <div id="root"></div>
   <script>
     window.onscroll = function() {myFunction()};
-
     var header = document.getElementById("header");
     var sticky = header.offsetTop;
-
     function myFunction() {
       if (window.pageYOffset > sticky) {
         header.classList.add("sticky");

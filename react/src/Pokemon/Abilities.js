@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize, 
+    CapitalizeHyphen, 
+    CapitalizeWordsRemoveHyphen, 
+    CapitalizePokemonWithHyphen 
+   } from '../Helpers/Helpers';
 import axios from 'axios';
 
-// Returns data about a pokemon ability/hidden ability
+/**
+ * Returns true if pokemon has the given ability
+ */
+function checkForAbility(pokemonData, abilityName) {
+    return pokemonData?.abilities.some(ability => ability.ability.name === abilityName);
+}
+
+/**
+ * Renders Pokemon's abilities and hidden abilites in a custom div
+ */
 function Abilities() {
     const { name } = useParams();
     const [pokemonData, setPokemonData] = useState(null);
-    const { CapitalizePokemonWithHyphen } = Helpers;
+    // const { CapitalizePokemonWithHyphen } = Helpers;
     const [hiddenAbility, setHiddenAbility] = useState(null);
+
     useEffect(() => {
       const fetchPokemonData = async () => {
         try {
@@ -24,10 +38,12 @@ function Abilities() {
       };
       fetchPokemonData();
     }, [name]);
+
     return (
         <div className='Pokemon-Abilities'>
-            {pokemonData && (
-                <><p className='Pokemon-Ablility' style={{
+            {pokemonData && ( <>
+            {/* Renders regular abilities */}
+                <p className='Pokemon-Ablility' style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -41,14 +57,15 @@ function Abilities() {
                     color: "black",
                     border: '4px solid black',
                     borderRadius: '10px',
-                }}>
+                }}>{pokemonData.abilities.filter((ability) => !ability.is_hidden).length === 1 ? (
+                        "Ability: ") : ("Abilities: ")}
                     {pokemonData.abilities
                         .filter((ability) => !ability.is_hidden && ability.slot !== 3)
                         .map((ability) => CapitalizePokemonWithHyphen(ability.ability.name.replace(/-/g, ' ')))
                         .join(', ')}
                 </p>
-            {/* Logic for displaying hidden abilities */}
-                {pokemonData.abilities.some((ability) => ability.is_hidden && ability.slot === 3 
+            {/* Renders hidden abilities */}
+                {pokemonData.abilities.some((ability) => ability.is_hidden && ability.slot === 3
                 && !pokemonData.abilities.some((regularAbility) => regularAbility.slot !== 3 && regularAbility.ability.name === ability.ability.name)) && (
                 <p className='Pokemon-HiddenAblility' style={{
                     display: 'flex',
@@ -64,10 +81,10 @@ function Abilities() {
                     color: "black",
                     border: '4px solid black',
                     borderRadius: '10px',
-                }}>{hiddenAbility}</p>)}</>
+                }}>Hidden Ability: {hiddenAbility}</p>)}</>
             )}
         </div>
     )
 }
 
-export default Abilities;
+export { checkForAbility, Abilities };

@@ -1,12 +1,3 @@
-// import { render, screen } from '@testing-library/react';
-// import App from './App';
-
-// test('renders learn react link', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
@@ -33,16 +24,5 @@ describe('App', () => {
     expect(screen.getByText(/Pokemon Entry/i)).toBeInTheDocument();
   });
 
-
-  it('renders Calculator component for the "/calculator" route', () => {
-    render(
-      <MemoryRouter initialEntries={['/calculator']}>
-        <App />
-      </MemoryRouter>
-    );
-
-    // Assuming Calculator component has some unique content or identifier
-    expect(screen.getByText(/Calculator/i)).toBeInTheDocument();
-  });
 });
 

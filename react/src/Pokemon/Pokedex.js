@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Helpers from '../Helpers/Helpers';
-import axios from 'axios';
+import { Capitalize, 
+    CapitalizeHyphen, 
+    CapitalizeWordsRemoveHyphen, 
+    CapitalizePokemonWithHyphen 
+   } from '../Helpers/Helpers';
 import unknownIcon from "../unknownIcon.png"
+import axios from 'axios';
+import './Pokedex.css';
 
 function Pokedex() {
+    // const { CapitalizePokemonWithHyphen } = Helpers;
+    const [loading, setLoading] = useState(true); // Loading state
     const [pokemonList, setPokemonList] = useState([]);
-    const [sortOption, setSortOption] = useState('Ascending');
-    const [searchTerm, setSearchTerm] = useState('');
+    const [originalPokemonList, setOriginalPokemonList] = useState([]); // Store original unfiltered list
     const [suggestedPokemon, setSuggestedPokemon] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [hoveredPokemon, setHoveredPokemon] = useState(null);
     const [clickedPokemon, setClickedPokemon] = useState(null); // State to track clicked link
-    const { CapitalizePokemonWithHyphen } = Helpers;
-
+    const [sortOption, setSortOption] = useState('Ascending');
+    
     const getPokemonId = (url) => {
         const urlParts = url.split('/');
         const pokemonId = urlParts[urlParts.length - 2];
@@ -23,21 +30,16 @@ function Pokedex() {
         const fetchData = async () => {
             try {
                 const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1025');
-                let sortedList = response.data.results;
-                if (sortOption === 'Descending') {
-                    sortedList = sortedList.reverse();
-                } else if (sortOption === 'Alphabetically') {
-                    sortedList = sortedList.sort((a, b) => a.name.localeCompare(b.name));
-                } else if (sortOption === 'ReverseAlphabetically') {
-                    sortedList = sortedList.sort((a, b) => b.name.localeCompare(a.name));
-                }
-                setPokemonList(sortedList);
+                const pokemonData = response.data.results;
+                setPokemonList(pokemonData);
+                setOriginalPokemonList(pokemonData); // Set original unfiltered list
+                setLoading(false); // Set loading to false when data is fetched
             } catch (error) {
                 console.error('Error fetching Pokemon data:', error);
             }
         };
         fetchData();
-    }, [sortOption]);
+    }, []);
 
     const handleSearch = () => {
         const matchingPokemon = pokemonList.find(
@@ -69,130 +71,166 @@ function Pokedex() {
         setClickedPokemon(pokemonName);
     };
 
+    const handleFilter = (filterOption) => {
+        let filteredList = [];
+        if (filterOption === 'Legendary') {
+            // ADD LEGENDARY FILTER HERE
+        } else if (filterOption === 'Mythical') {
+            // ADD MYTHICAL FILTER HERE
+        } else if (filterOption === 'Descending') {
+            filteredList = [...originalPokemonList].reverse();
+        } else if (filterOption === 'Alphabetically') {
+            filteredList = [...originalPokemonList].sort((a, b) => a.name.localeCompare(b.name));
+        } else if (filterOption === 'ReverseAlphabetically') {
+            filteredList = [...originalPokemonList].sort((a, b) => b.name.localeCompare(a.name));
+        } else if (filterOption === 'All') {
+            filteredList = originalPokemonList;
+        } else if (filterOption === 'Start with Letter A') {
+            filteredList = originalPokemonList.filter(pokemon => pokemon.name.toLowerCase().startsWith('a'));
+        } else if (filterOption === 'Starter Pokemon') {
+            filteredList = originalPokemonList.filter(pokemon => {
+                const pokemonId = parseInt(getPokemonId(pokemon.url));
+                return (pokemonId >= 1 && pokemonId <= 9) // Kanto Starters
+                    || (pokemonId >= 152 && pokemonId <= 160) // Johto Starters
+                    || (pokemonId >= 252 && pokemonId <= 260) // Hoenn Starters
+                    || (pokemonId >= 387 && pokemonId <= 395) // Sinnoh Starters
+                    || (pokemonId >= 495 && pokemonId <= 503) // Unova Starters
+                    || (pokemonId >= 650 && pokemonId <= 658) // Kalos Starters 
+                    || (pokemonId >= 722 && pokemonId <= 730) // Alola Starters
+                    || (pokemonId >= 810 && pokemonId <= 818) // Galar Starters
+                    || (pokemonId >= 906 && pokemonId <= 914) // Paldea Starters
+            });
+        }
+        setPokemonList(filteredList);
+    };
+    
+    
+
     return (
         <div>
-            <label htmlFor="Sort">Sort By:</label>
-            <select
-                name="Sort"
-                id="Sort"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-            >
-                <option value="Ascending">Ascending</option>
-                <option value="Descending">Descending</option>
-                <option value="Alphabetically">Alphabetically</option>
-                <option value="ReverseAlphabetically">Reverse Alphabetically</option>
-            </select>
+            {/* Loading Screen */}
+            {loading ? (
+                <div style={{
+                    fontSize: "50px",
+                    textAlign: "center"
+                }}>Loading...</div>
+            ) : (
+                <div>
+                    <div style={{ position: 'relative', margin: '10px', textAlign: 'center' }}>
+                        {/* Search Bar */}
+                        <input type="text" className='Search-Bar'
+                            placeholder="Search Pokemon"
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                handleAutocomplete(e.target.value);
+                            }}
+                        />
 
-            <div style={{ position: 'relative', margin: '10px' }}>
-                <input
-                    type="text"
-                    placeholder="Search Pokemon"
-                    value={searchTerm}
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        handleAutocomplete(e.target.value);
-                    }}
-                    style={{ marginRight: '5px' }}
-                />
-                <button onClick={handleSearch}>Search</button>
-                {suggestedPokemon.length > 0 && (
-                    <ul style={{
-                            listStyle: 'none',
-                            padding: '0',
-                            textAlign: 'center',
-                            position: 'absolute',
-                            top: '100%',
-                            left: '0',
-                            width: '100%',
-                            background: '#fff',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                            zIndex: '1',
-                        }}>
-                        {suggestedPokemon.map((pokemon) => (
-                            <li key={pokemon.name}>
-                                <Link to={`/${pokemon.name}`} style={{ color: '#000', display: 'block', padding: '8px' }}>
-                                    {CapitalizePokemonWithHyphen(pokemon.name)}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                        {/* Search Button */}
+                        <button onClick={handleSearch} className='Search-Button'>Search</button>
+                        
+                        {/* Search Suggestions */}
+                        {suggestedPokemon.length > 0 && (
+                            <ul className="Suggest-Search">
+                                {suggestedPokemon.map((pokemon) => (
+                                    <li key={pokemon.name}>
+                                        <Link to={`/${pokemon.name}`} style={{ color: '#000', display: 'block', padding: '8px', textDecoration: "none" }}>
+                                            {CapitalizePokemonWithHyphen(pokemon.name)}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                {/* <Link to="/favorites">Favorites</Link> */}
-            </div>
+                        {/* Sort */}
+                        <label htmlFor="Sort" style={{ marginRight: '5px', marginBottom: "5px" }}>Sort By:</label>
+                        <select
+                            name="Sort"
+                            id="Sort"
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}>
+                            <option value="Ascending">Ascending</option>
+                            <option value="Descending">Descending</option>
+                            <option value="Alphabetically">Alphabetically</option>
+                            <option value="ReverseAlphabetically">Reverse Alphabetically</option>
+                        </select>
+                        
+                        {/* Filter */}
+                        <label htmlFor="Filter" style={{ marginRight: '5px', marginBottom: "5px", marginLeft: "10px" }}>Filter By:</label>
+                        <select
+                            name="Filter"
+                            id="Filter"
+                            onChange={(e) => handleFilter(e.target.value)}>
+                            <option value="All">All</option>
+                            <option value="Start with Letter A">Start with Letter A</option>
+                            <option value="Type">Type</option>
+                            <option value="Starter Pokemon">Starter Pokemon</option>
+                            <option value="Regional Variants">Regional Variants</option>
+                            <option value="Pseudo-Legendary">Pseudo-Legendary</option>
+                            <option value="Legendary">Legendary</option>
+                            <option value="Mythical">Mythical</option>
+                            <option value="Ultra Beast">Ultra Beast</option>
+                            <option value="Paradox Pokemon">Paradox Pokemon</option>
+                            <option value="Fossils">Fossils</option>
+                        </select>
 
-            <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                marginLeft: "80px",
-                marginRight: "80px",
-                backgroundColor: "#28282B",
-                border: "10px solid black",
-                borderRadius: "0.3%",
-                marginBottom: "40px",}}>
-                {pokemonList.map((pokemon) => {
-                    const itemStyles = {
-                        width: '30%',
-                        margin: '10px',
-                        boxSizing: 'border-box',
-                        backgroundColor: "gray",
-                        border: `3px solid ${clickedPokemon === pokemon.name ? '#003366' : (hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB')}`, // Change border color when clicked
-                        borderRadius: "5%",
-                        boxShadow: '10px 10px 0 rgba(40, 40, 43, 0.7)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        transition: 'border-color 0.3s ease-in-out, border-width 0.3s ease-in-out, margin 0.3s ease-in-out', // added margin transition
-                    };
-                    const hoveredStyles = {
-                        border: `6px solid ${hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB'}`, // double border size when hovered
-                        margin: hoveredPokemon === pokemon.name ? '7px' : '10px', // set margin to 7 during hover, otherwise 10
-                    };
+                    </div>
+                    <div className="Pokemon-Container">
+                        {pokemonList.map((pokemon) => {
+                            const itemStyles = {
+                                width: '30%',
+                                margin: '10px',
+                                boxSizing: 'border-box',
+                                backgroundColor: "gray",
+                                border: `3px solid ${clickedPokemon === pokemon.name ? '#003366' : (hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB')}`, // Change border color when clicked
+                                borderRadius: "5%",
+                                boxShadow: '10px 10px 0 rgba(40, 40, 43, 0.7)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                transition: 'border-color 0.3s ease-in-out, background-color 0.2s ease-in-out, border-radius 0.2s ease-in-out', // added transitions for border color, background color, and border radius
+                            };
 
-                    return (
-                        <div key={pokemon.name} style={{ 
-                            ...itemStyles, 
-                            ...(hoveredPokemon === pokemon.name && hoveredStyles) }} 
-                            onMouseEnter={() => handleMouseEnter(pokemon.name)} 
-                            onMouseLeave={handleMouseLeave}>
-                            <a href={`/${pokemon.name}`} onClick={() => handleClick(pokemon.name)}>
-                                <img
-                                    src={`https://projectpokemon.org/images/sprites-models/sv-sprites-home/${getPokemonId(pokemon.url)}.png`}
-                                    alt={`${getPokemonId(pokemon.url)}`}
-                                    style={{
-                                        maxWidth: '120px',
-                                        maxHeight: '120px',
-                                        marginTop: "5px",
-                                        marginLeft: "7px",
-                                        marginRight: "10px",
-                                        backgroundColor: "#b2b2b2",
-                                        border: "6px solid #999999",
-                                        borderRadius: "20%"
-                                    }}
-                                    onError={(e) => {
-                                        e.target.src = unknownIcon;
-                                        console.error('Image failed to load, using unknownIcon:', e);
-                                    }}
-                                />
-                            </a>
-                            <Link to={`/${pokemon.name}`} style={{
-                                color: '#fff',
-                                WebkitTapHighlightColor: 'transparent',
-                                textDecoration: "none",
-                                fontSize: "1.25rem",
-                                textAlign: "center",
-                                marginTop: "10px",
-                            }}>
-                                {CapitalizePokemonWithHyphen(pokemon.name)} (#{getPokemonId(pokemon.url)})
-                            </Link>
-                        </div>
-                    );
-                })}
-            </div>
+                            const hoveredStyles = {
+                                border: `9px solid ${hoveredPokemon === pokemon.name ? '#66b3ff' : '#a8a8aB'}`,
+                                margin: hoveredPokemon === pokemon.name ? '7px' : '10px',
+                                backgroundColor: hoveredPokemon === pokemon.name ? '#b3e0ff' : 'gray',
+                            };
+
+                            return (
+                                <div key={pokemon.name} style={{ 
+                                    ...itemStyles, 
+                                    ...(hoveredPokemon === pokemon.name && hoveredStyles) }} 
+                                    onMouseEnter={() => handleMouseEnter(pokemon.name)} 
+                                    onMouseLeave={handleMouseLeave}>
+                                    <a href={`/${pokemon.name}`} onClick={() => handleClick(pokemon.name)}>
+                                        <img src={getPokemonSprite(pokemon)} className='Menu-Sprite' alt={`${getPokemonId(pokemon.url)}`} onError={(e) => {
+                                            e.target.src = unknownIcon;
+                                            console.error('Image failed to load, using unknownIcon:', e);
+                                        }} />
+                                    </a>
+                                    <Link to={`/${pokemon.name}`} className="Pokemon-Link">
+                                        {CapitalizePokemonWithHyphen(pokemon.name)} (#{getPokemonId(pokemon.url)})
+                                    </Link>
+                                </div>
+                            );
+                            
+                            function getPokemonSprite(pokemon) {
+                                const pokemonId = getPokemonId(pokemon.url);
+                                if (pokemonId > 1008) {
+                                    return `https://img.pokemondb.net/sprites/scarlet-violet/normal/${pokemon.name}.png`;
+                                } else {
+                                    return `https://projectpokemon.org/images/sprites-models/sv-sprites-home/${pokemonId}.png`;
+                                }
+                            }
+                        })}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

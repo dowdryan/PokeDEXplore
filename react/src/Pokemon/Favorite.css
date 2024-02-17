@@ -1,0 +1,4 @@
+.Pokemon-Link:hover {
+    border-color: lightblue; /* Change border color on hover */
+    transform: scale(1.2); /* Double the size on hover */
+}

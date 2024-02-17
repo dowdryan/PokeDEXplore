@@ -16,24 +16,32 @@ const Stats = ({ pokemon }) => {
   };
 
   const renderStatMeter = (statName, baseStat) => {
+    const percentage = baseStat / 255;
+    const originalHue = 11 + Math.round(percentage * (164 - 11));
+    const backgroundColor = `hsl(${originalHue}, 85%, 55%)`;
+    const darkerHue = originalHue * 0.9;
+    const darkerBackgroundColor = `hsl(${darkerHue}, 85%, 45%)`;
+
+
     return (
       <tr>
         <th>
           <div style={{float:"left"}}><span style={{color:"#000"}}>{statName}</span>:</div>
           <div style={{float:"right"}}>{baseStat}</div>
         </th>
-        <td style={{width:"255px", background: "#FF5959", border: "2px solid rgba(0, 0, 0, 0.2)"}}><div class="statbar" style={{
-          backgroundColor: "#FF0000", 
-          border: "1px solid #A60000", 
-          // borderRadius: "10px",
-          borderTopRightRadius: "5px",
-          borderBottomRightRadius: "5px",
-          width: `calc(100% * ${baseStat}/255)`, 
-          height:"20px"}}></div>
+        <td style={{width:"255px", background: "#0000004D", border: `2px solid rgba(0, 0, 0, 0.2)`, borderRadius: "5px",}}>
+          <div class="statbar" style={{
+            backgroundColor: backgroundColor, 
+            border: `2px solid ${darkerBackgroundColor}`, 
+            borderRadius: "3px",
+            width: `calc(100% * ${baseStat}/259)`, 
+            height:"20px"}}>
+          </div>
         </td>
       </tr>
     );
-  };
+};
+
   
   return (
     <div
@@ -59,46 +67,47 @@ const Stats = ({ pokemon }) => {
             <tbody>
               <tr>
                 <th colSpan={2} rowSpan={2} style={{
+                  fontSize: "20px",
                   background: "#999999",
-                  borderTopRightRadius: "10px",
-                  MozBorderRadiusTopright: "10px",
-                  WebkitBorderTopRightRadius: "10px",
-                  KhtmlBorderTopRightRadius: "10px",
-                  IcabBorderTopRightRadius: "10px",
-                  OBorderTopRightRadius: "10px",
+                  borderRadius: "10px",
+                  // MozBorderRadiusTopright: "10px",
+                  // WebkitBorderTopRightRadius: "10px",
+                  // KhtmlBorderTopRightRadius: "10px",
+                  // IcabBorderTopRightRadius: "10px",
+                  // OBorderTopRightRadius: "10px",
                 }}>Stats</th>
               </tr>
               <tr>
               </tr>
-              {renderStatMeter(
-                "HP",
-                pokemonData.stats.find((stat) => stat.stat.name === "hp").base_stat
-              )}
-              {renderStatMeter(
-                "Attack",
-                pokemonData.stats.find((stat) => stat.stat.name === "attack").base_stat
-              )}
+                {renderStatMeter(
+                  "HP",
+                  pokemonData.stats.find((stat) => stat.stat.name === "hp").base_stat
+                )}
+                {renderStatMeter(
+                  "Attack",
+                  pokemonData.stats.find((stat) => stat.stat.name === "attack").base_stat
+                )}
 
-              {renderStatMeter(
-                "Defense",
-                pokemonData.stats.find((stat) => stat.stat.name === "defense").base_stat
-              )}
-              {renderStatMeter(
-                "Sp. Attack",
-                pokemonData.stats.find((stat) => stat.stat.name === "special-attack").base_stat
-              )}
-              {renderStatMeter(
-                "Sp. Defense",
-                pokemonData.stats.find((stat) => stat.stat.name === "special-defense").base_stat
-              )}
-              {renderStatMeter(
-                "Speed",
-                pokemonData.stats.find((stat) => stat.stat.name === "speed").base_stat
-              )}
-              <tr style={{background: "gray"}}>
+                {renderStatMeter(
+                  "Defense",
+                  pokemonData.stats.find((stat) => stat.stat.name === "defense").base_stat
+                )}
+                {renderStatMeter(
+                  "Sp. Attack",
+                  pokemonData.stats.find((stat) => stat.stat.name === "special-attack").base_stat
+                )}
+                {renderStatMeter(
+                  "Sp. Defense",
+                  pokemonData.stats.find((stat) => stat.stat.name === "special-defense").base_stat
+                )}
+                {renderStatMeter(
+                  "Speed",
+                  pokemonData.stats.find((stat) => stat.stat.name === "speed").base_stat
+                )}
+              <tr>
                 <th>
-                  <div style={{float:"left"}}><span style={{color:"#000"}}>Total</span>:</div>
-                  <div style={{float:"right"}}>{calculateTotalStats()}</div>
+                  <div style={{float:"right", marginRight: "50px"}}><span>Total</span>: {calculateTotalStats()}</div>
+                  {/* <div style={{float:"right"}}>{calculateTotalStats()}</div> */}
                 </th>
               </tr>
             </tbody>

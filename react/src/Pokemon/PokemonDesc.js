@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Helpers from '../Helpers/Helpers';
+import { Capitalize, 
+  CapitalizeHyphen, 
+  CapitalizeWordsRemoveHyphen, 
+  CapitalizePokemonWithHyphen 
+ } from '../Helpers/Helpers';
 
 // Fetches the pokemon's most recent pokedex description.
 function PokedexDesc() {
     const { name } = useParams();
     const [description, setDescription] = useState('');
     const [speciesData, setSpeciesData] = useState(null);
-    const { Capitalize, CapitalizePokemonWithHyphen } = Helpers;
+    // const { Capitalize, CapitalizePokemonWithHyphen } = Helpers;
 
     useEffect(() => {
         const fetchSpeciesData = async () => {
