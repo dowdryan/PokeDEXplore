@@ -27,6 +27,6 @@ My Own API:
     - Upon unchecking the favorite box for a specific pokemon, it searches for the pokemon's name and id in "/api/user-favorites" and sends them to "/api/remove-favorite" to remove them from the API.
 
 Tech Stacks:
-    - Front End: 
-    - Back End: 
+    - Front End: Using React, users are able to access a pokemon's page, where their respective data is listed.
+    - Back End: Using Node.js and Express, users can favorite a Pokemon. The name and ID are sent to an API located in the frontend. On the favorites page, the program will access the frontend to search for the names and ID of the user's favorite pokemon. They will then be displayed in the page, where users can sort them and visit their own individual pages.
     - Software needed: React, Node, Express
