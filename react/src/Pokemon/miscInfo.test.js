@@ -7,7 +7,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
 import FetchSpeciesData from './Data/fetchSpeciesData';
 import MiscInfo from './miscInfo';
-
+jest.mock('axios');
 
 const TestInfo = () => {
     const data = FetchSpeciesData()
@@ -31,9 +31,9 @@ const TestInfo = () => {
 
 describe('MiscInfo', () => {
   it('displays miscellanious info about a Pokémon', async () => {
-    // const mockAxios = new MockAdapter(axios);
+    const mockAxios = new MockAdapter(axios);
     const mockData = {
-        base_happiness: 50,
+        base_happiness: 70,
         capture_rate: 60,
         // egg_groups: [
         //   { name: 'field', url: 'https://pokeapi.co/api/v2/egg-group/1'},
@@ -45,7 +45,7 @@ describe('MiscInfo', () => {
         //     "url": "https://pokeapi.co/api/v2/growth-rate/6/"
         // },
     };
-    // mockAxios.onGet('https://pokeapi.co/api/v2/pokemon-species/wailord').reply(200, mockData);
+    mockAxios.onGet('https://pokeapi.co/api/v2/pokemon-species/wailord').reply(200, mockData);
     axios.get.mockResolvedValue({ data: mockData });
     const { getByText } = render(
       <MemoryRouter initialEntries={['/wailord']}>

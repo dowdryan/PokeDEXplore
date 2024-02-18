@@ -7,12 +7,11 @@ import { Capitalize,
   CapitalizePokemonWithHyphen 
  } from '../Helpers/Helpers';
 
-// Fetches the pokemon's most recent pokedex description.
+// Fetches the pokemon's pokedex description.
 function PokedexDesc() {
     const { name } = useParams();
     const [description, setDescription] = useState('');
     const [speciesData, setSpeciesData] = useState(null);
-    // const { Capitalize, CapitalizePokemonWithHyphen } = Helpers;
 
     useEffect(() => {
         const fetchSpeciesData = async () => {
@@ -55,10 +54,3 @@ function PokedexDesc() {
 }
 
 export default PokedexDesc
-
-/**
- * Does not display entries for pokemon forms with hyphens 
-   * (unless the link contains their dex number)
-   * Ex: Giratina-Altered, Shaymin-Land, Landorus-Incarnate
-   * Does display entries for both genders of Nidoran
- */

@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Capitalize } from '../Helpers/Helpers';
 import FetchPokemonData from './Data/fetchPokemonData';
 
-// Gets and renders the pokemon's type(s)
+// Fetches and renders the pokemon's type(s)
 function Types({ pokemon }) {
-    // console.log("ngiowougbuowbujofgbnouwjngoubwoujb")
     const pokemonData = FetchPokemonData(pokemon);
     const getTypeColor = (types) => {
         const typeColors = {
@@ -30,8 +29,6 @@ function Types({ pokemon }) {
         return typeColors[types] || "#FFFFFF"; // Default to white if the type is not found
     };
 
-    // {console.log("jfiwhoufhouwhoufhouihuobh")}
-    // {console.log(pokemonData.types)}
     return (
         <div>
             {pokemonData && (
@@ -44,7 +41,7 @@ function Types({ pokemon }) {
                             borderRadius: '5px',
                             color: 'white',
                             marginRight: '5px',
-                            boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)', // Subtle shadow effect
+                            boxShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
                         }}>
                         {Capitalize(type.type.name)}
                         </span>

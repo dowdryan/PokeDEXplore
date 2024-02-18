@@ -1,14 +1,6 @@
 import axios from 'axios';
-// import { Capitalize, 
-//     CapitalizeHyphen, 
-//     CapitalizeWordsRemoveHyphen, 
-//     CapitalizePokemonWithHyphen 
-//    } from '../Helpers/Helpers';
 
-
-/**
- * Fetches the pokemon's sprite based on it's current form
- */
+// Fetches the pokemon's sprite based on it's current form
 const fetchFormSpriteUrl = async (pokemonName) => {
     try {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Capitalize, 
-    CapitalizeHyphen, 
-    CapitalizeWordsRemoveHyphen, 
-    CapitalizePokemonWithHyphen 
-   } from '../Helpers/Helpers';
+import { CapitalizePokemonWithHyphen } from '../Helpers/Helpers';
 import axios from 'axios';
 
 /**

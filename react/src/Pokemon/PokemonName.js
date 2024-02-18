@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fixTypo, Capitalize, 
-  CapitalizeHyphen, 
-  CapitalizeWordsRemoveHyphen, 
-  CapitalizePokemonWithHyphen 
- } from '../Helpers/Helpers';
+import { fixTypo, CapitalizePokemonWithHyphen } from '../Helpers/Helpers';
 import FetchPokemonData from './Data/fetchPokemonData';
 import axios from 'axios';
 
-// Returns the pokemon's name and genus
+/**
+ * Returns the pokemon's name and genus
+  * Displays "Loading..." if a genus cannot be found.
+ */
 function PokemonName({ pokemon }) {
-  // const { fixTypo, CapitalizePokemonWithHyphen } = Helpers;
   const pokemonData = FetchPokemonData(pokemon);
   const { name } = useParams();
   const [genus, setGenus] = useState(null);

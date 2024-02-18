@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Capitalize, 
-    CapitalizeHyphen, 
-    CapitalizeWordsRemoveHyphen, 
-    CapitalizePokemonWithHyphen 
-   } from '../Helpers/Helpers';
+import { CapitalizePokemonWithHyphen } from '../Helpers/Helpers';
 import unknownIcon from "../unknownIcon.png"
 import axios from 'axios';
 import './Pokedex.css';
 
+
+/**
+ * Fetches and renders every pokemon and their sprites into a list.
+ */
 function Pokedex() {
-    // const { CapitalizePokemonWithHyphen } = Helpers;
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
     const [pokemonList, setPokemonList] = useState([]);
-    const [originalPokemonList, setOriginalPokemonList] = useState([]); // Store original unfiltered list
+    const [originalPokemonList, setOriginalPokemonList] = useState([]);
     const [suggestedPokemon, setSuggestedPokemon] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [hoveredPokemon, setHoveredPokemon] = useState(null);
-    const [clickedPokemon, setClickedPokemon] = useState(null); // State to track clicked link
+    const [clickedPokemon, setClickedPokemon] = useState(null);
     const [sortOption, setSortOption] = useState('Ascending');
     
     const getPokemonId = (url) => {
@@ -32,8 +31,8 @@ function Pokedex() {
                 const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1025');
                 const pokemonData = response.data.results;
                 setPokemonList(pokemonData);
-                setOriginalPokemonList(pokemonData); // Set original unfiltered list
-                setLoading(false); // Set loading to false when data is fetched
+                setOriginalPokemonList(pokemonData);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching Pokemon data:', error);
             }
@@ -71,19 +70,32 @@ function Pokedex() {
         setClickedPokemon(pokemonName);
     };
 
+    const handleSort = (sortOption) => {
+        let sortedList = [...pokemonList];
+        if (sortOption === 'Ascending') {
+            sortedList.sort((a, b) => {
+                const idA = parseInt(getPokemonId(a.url));
+                const idB = parseInt(getPokemonId(b.url));
+                return idA - idB;
+            });
+        } else if (sortOption === 'Descending') {
+            sortedList.sort((a, b) => {
+                const idA = parseInt(getPokemonId(a.url));
+                const idB = parseInt(getPokemonId(b.url));
+                return idB - idA;
+            });
+        } else if (sortOption === 'Alphabetically') {
+            sortedList.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortOption === 'ReverseAlphabetically') {
+            sortedList.sort((a, b) => b.name.localeCompare(a.name));
+        }
+        setPokemonList(sortedList);
+    };
+    
+
     const handleFilter = (filterOption) => {
         let filteredList = [];
-        if (filterOption === 'Legendary') {
-            // ADD LEGENDARY FILTER HERE
-        } else if (filterOption === 'Mythical') {
-            // ADD MYTHICAL FILTER HERE
-        } else if (filterOption === 'Descending') {
-            filteredList = [...originalPokemonList].reverse();
-        } else if (filterOption === 'Alphabetically') {
-            filteredList = [...originalPokemonList].sort((a, b) => a.name.localeCompare(b.name));
-        } else if (filterOption === 'ReverseAlphabetically') {
-            filteredList = [...originalPokemonList].sort((a, b) => b.name.localeCompare(a.name));
-        } else if (filterOption === 'All') {
+        if (filterOption === 'All') {
             filteredList = originalPokemonList;
         } else if (filterOption === 'Start with Letter A') {
             filteredList = originalPokemonList.filter(pokemon => pokemon.name.toLowerCase().startsWith('a'));
@@ -152,7 +164,10 @@ function Pokedex() {
                             name="Sort"
                             id="Sort"
                             value={sortOption}
-                            onChange={(e) => setSortOption(e.target.value)}>
+                            onChange={(e) => {
+                                setSortOption(e.target.value);
+                                handleSort(e.target.value);
+                            }}>
                             <option value="Ascending">Ascending</option>
                             <option value="Descending">Descending</option>
                             <option value="Alphabetically">Alphabetically</option>
@@ -167,15 +182,7 @@ function Pokedex() {
                             onChange={(e) => handleFilter(e.target.value)}>
                             <option value="All">All</option>
                             <option value="Start with Letter A">Start with Letter A</option>
-                            <option value="Type">Type</option>
                             <option value="Starter Pokemon">Starter Pokemon</option>
-                            <option value="Regional Variants">Regional Variants</option>
-                            <option value="Pseudo-Legendary">Pseudo-Legendary</option>
-                            <option value="Legendary">Legendary</option>
-                            <option value="Mythical">Mythical</option>
-                            <option value="Ultra Beast">Ultra Beast</option>
-                            <option value="Paradox Pokemon">Paradox Pokemon</option>
-                            <option value="Fossils">Fossils</option>
                         </select>
 
                     </div>

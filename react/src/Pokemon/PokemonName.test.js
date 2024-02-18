@@ -5,11 +5,7 @@ import { useParams } from 'react-router-dom'; // Mocked useParams
 import FetchPokemonData from './Data/fetchPokemonData'; // Mocked FetchPokemonData
 import PokemonName from './PokemonName';
 jest.mock('axios');
-
-// Mocking FetchPokemonData
 jest.mock('./Data/fetchPokemonData', () => jest.fn());
-
-// Mocking useParams
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: jest.fn(),

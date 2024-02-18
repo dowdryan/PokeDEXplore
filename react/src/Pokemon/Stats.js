@@ -53,7 +53,6 @@ const Stats = ({ pokemon }) => {
         marginLeft: "20px",}}
     >
       {pokemonData && (
-        // <div>
           <table style={{
             background: "#FFFFFF",
             border: "4px solid black",
@@ -70,11 +69,6 @@ const Stats = ({ pokemon }) => {
                   fontSize: "20px",
                   background: "#999999",
                   borderRadius: "10px",
-                  // MozBorderRadiusTopright: "10px",
-                  // WebkitBorderTopRightRadius: "10px",
-                  // KhtmlBorderTopRightRadius: "10px",
-                  // IcabBorderTopRightRadius: "10px",
-                  // OBorderTopRightRadius: "10px",
                 }}>Stats</th>
               </tr>
               <tr>
@@ -107,7 +101,6 @@ const Stats = ({ pokemon }) => {
               <tr>
                 <th>
                   <div style={{float:"right", marginRight: "50px"}}><span>Total</span>: {calculateTotalStats()}</div>
-                  {/* <div style={{float:"right"}}>{calculateTotalStats()}</div> */}
                 </th>
               </tr>
             </tbody>

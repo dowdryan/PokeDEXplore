@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Capitalize, 
-    CapitalizeHyphen, 
-    CapitalizeWordsRemoveHyphen, 
-    CapitalizePokemonWithHyphen 
-   } from '../Helpers/Helpers';
+import { Capitalize, CapitalizeWordsRemoveHyphen } from '../Helpers/Helpers';
 import axios from 'axios';
 
 
 /**
- * Renders a pokemon's learnset
+ * Renders a pokemon's learnset (The moves a pokemon can learn upon leveling up)
  */
 function Learnset({ pokemon }) {
     const { name } = useParams();
@@ -33,14 +29,8 @@ function Learnset({ pokemon }) {
                             }
                             return null;
                         });
-
-                    // Filter out moves that are null (not learned through both level-up and TM)
                     const filteredMoves = (await Promise.all(levelUpMovesData)).filter(move => move !== null);
-
-                    // Sort moves based on level
                     const sortedMoves = filteredMoves.sort((a, b) => a.levelLearnedAt - b.levelLearnedAt);
-
-                    // Replace level 0 with "Evo."
                     const finalMoves = sortedMoves.map(move => ({
                         ...move,
                         levelLearnedAt: move.levelLearnedAt === 0 ? "Evo." : move.levelLearnedAt

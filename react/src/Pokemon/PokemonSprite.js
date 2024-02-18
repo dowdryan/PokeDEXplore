@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Capitalize, 
-    CapitalizeHyphen, 
     CapitalizeWordsRemoveHyphen, 
     CapitalizePokemonWithHyphen 
    } from '../Helpers/Helpers';
@@ -9,26 +8,20 @@ import FetchPokemonData from './Data/fetchPokemonData';
 import useLegendaryMythicalStatus from './isLegendary';
 import { checkForAbility } from './Abilities';
 import { fetchFormSpriteUrl, fetchPokemonForms } from './Forms';
-import usePokemonCry from './PlayCry'; // Import the usePokemonCry hook
+import usePokemonCry from './PlayCry';
 import unknownIcon from '../unknownIcon.png';
 import UltraWormhole from './UltraWormhole.jpg';
-// import axios from 'axios';
 import './PokemonSprite.css';
 
-// import PokemonName from './PokemonName'
-// import Types from "./Types"
-// import PokemonDesc from './PokemonDesc';
-// import HeightWidth from './Height-Width';
-// import { Abilities } from './Abilities';
-// import Stats from './Stats';
-// import Learnset from './Learnset';
-// import Evolutions from './Evolutions';
-// import MiscInfo from './miscInfo';
 
-
+/**
+ * Gets and renders a Pokemon's sprite 
+    * Will display an unknown icon if the sprite cannot be found.
+ * Able to change sprites based on the current form
+ * PlayCry function is called here
+ */
 function PokemonSprite({ pokemon }) {
     const { name } = useParams();
-    // const { Capitalize, CapitalizePokemonWithHyphen, CapitalizeWordsRemoveHyphen } = Helpers;
     const [formData, setFormData] = useState(null);
     const pokemonData = FetchPokemonData(pokemon);
     const imageRef = useRef(null);
@@ -37,15 +30,14 @@ function PokemonSprite({ pokemon }) {
     const [isUltraWormhole, setIsUltraWormhole] = useState(false);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
     const { isLegendary, isMythical } = useLegendaryMythicalStatus(pokemonData);
-    const [cryUrl, fetchCryUrl] = usePokemonCry(); // Use the usePokemonCry hook to get the cry URL
+    const [cryUrl, fetchCryUrl] = usePokemonCry();
 
     const handleFormChange = async (event) => {
         const selectedFormName = event.target.value;
         setSelectedForm(selectedFormName);
         const formSpriteUrl = await fetchFormSpriteUrl(selectedFormName);
         setFormSpriteUrl(formSpriteUrl);
-        fetchCryUrl(selectedFormName); // Fetch cry URL for the selected form
-        // Fetch abilities for selected form
+        fetchCryUrl(selectedFormName);
     };
 
     useEffect(() => {
@@ -84,7 +76,6 @@ function PokemonSprite({ pokemon }) {
         <div className='Pokemon-Sprite' style={{ position: 'relative' }}>
             {pokemonData && (
                 <div>
-                    {/* <PokemonName pokemon={pokemonData.id}/> */}
                     <img
                         className='Pokemon-Sprite'
                         ref={imageRef}
@@ -145,18 +136,6 @@ function PokemonSprite({ pokemon }) {
                     </select>
                 </div>
             )}
-            {/* {pokemonData && (
-                <div>
-                    <Types pokemon={pokemonData.id}/>
-                    <Abilities/>
-                    <HeightWidth pokemon={pokemonData.id}/>
-                    <MiscInfo/>
-                    <PokemonDesc/>
-                    <Stats pokemon={pokemonData.id}/>
-                    <Learnset pokemon={pokemonData.id}/>
-                    <Evolutions pokemon={pokemonData.id}/>
-                </div>
-            )} */}
         </div>
     );
 }

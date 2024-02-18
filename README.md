@@ -1,5 +1,4 @@
 ============================================================================================================================================
-
 Title: PokeDEXplore
 
 Functionality: Lists every pokemon and their data. Users can sort and favorite pokemon.
@@ -28,7 +27,6 @@ My Own API:
     - Upon unchecking the favorite box for a specific pokemon, it searches for the pokemon's name and id in "/api/user-favorites" and sends them to "/api/remove-favorite" to remove them from the API.
 
 Tech Stacks:
-    - 
-
-Important Notes: 
-    - Want to add a 404 page
+    - Front End: 
+    - Back End: 
+    - Software needed: React, Node, Express

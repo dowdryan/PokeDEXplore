@@ -12,8 +12,7 @@ function MiscInfo() {
   const { name } = useParams();
   const [speciesData, setSpeciesData] = useState(null);
   const [eggGroups, setEggGroups] = useState([]);
-  const [loading, setLoading] = useState(true); // Introduce loading state
-  // const { CapitalizeHyphen } = Helpers;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSpeciesData = async () => {
@@ -27,7 +26,6 @@ function MiscInfo() {
         'iron-thorns', 'roaring-moon', 'iron-valiant', 'walking-wake', 'gouging-fire',
         'raging-bolt', 'iron-leaves', 'iron-boulder', 'iron-crown'];
         const cleanedName = exceptions.includes(name.toLowerCase()) ? name : name.replace(/-.*$/, '');
-        // console.log(`https://pokeapi.co/api/v2/pokemon-species/${cleanedName.toLowerCase()}`)
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${cleanedName.toLowerCase()}`);
         setSpeciesData(response.data);
         const eggGroupNames = await Promise.all(
@@ -41,7 +39,7 @@ function MiscInfo() {
       } catch (error) {
         console.error('Error fetching Pokemon description:', error);
       } finally {
-        setLoading(false); // Set loading to false after the request is complete
+        setLoading(false);
       }
     };
 

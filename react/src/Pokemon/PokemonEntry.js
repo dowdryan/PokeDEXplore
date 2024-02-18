@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Capitalize, 
-  CapitalizeHyphen, 
-  CapitalizeWordsRemoveHyphen, 
-  CapitalizePokemonWithHyphen 
- } from '../Helpers/Helpers';
+import { CapitalizePokemonWithHyphen } from '../Helpers/Helpers';
 import PokemonName from './PokemonName'
 import PokemonSprite from './PokemonSprite'
 import PokemonDesc from './PokemonDesc';
@@ -18,6 +14,17 @@ import MiscInfo from './miscInfo';
 import axios from 'axios';
 import "./PokemonEntry.css"
 
+/**
+ * Serves as a pokemon's unique page.
+ * Fetches data from PokeAPI and renders it into a page for an individual pokemon.
+  * Data includes:
+    * Name
+    * ID
+    * Sprite
+    * Types
+    * Stats
+    * etc.
+ */
 function PokemonEntry() {
   const { name } = useParams();
   // const { CapitalizePokemonWithHyphen } = Helpers;
@@ -29,7 +36,7 @@ function PokemonEntry() {
 
 
   /**
-   * DOCUMENT HERE
+   * Fetches data from "https://pokeapi.co/api/v2/pokemon/"
    */
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -48,9 +55,8 @@ function PokemonEntry() {
     fetchPokemonData();
   }, [name]);
 
-
   /**
-   * DOCUMENT HERE
+   * Fetches data from "https://pokeapi.co/api/v2/pokemon-species/"
    */
   useEffect(() => {
     const fetchSpeciesData = async () => {
@@ -105,7 +111,7 @@ function PokemonEntry() {
     <div className='Pokemon-Info' style={{
       backgroundColor: "#28282B",
       border: "20px solid black",
-      borderRadius: "5%",
+      borderRadius: "50px",
       color: "#fff",
       marginTop: "40px",
       marginBottom: "120px"}}>
@@ -143,6 +149,7 @@ function PokemonEntry() {
               />
             </label>
           </div>
+          {/* Functions made in seperate files are called here */}
           <PokemonName pokemon={pokemonData.id}/>
           <PokemonSprite pokemon={pokemonData.id}/>
           <Types pokemon={pokemonData.id}/>

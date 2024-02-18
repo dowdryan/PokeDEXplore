@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+// Play's a pokemon's unique cry.
 const usePokemonCry = () => {
     const [cryUrl, setCryUrl] = useState(null);
     const fetchCryUrl = async (pokemonName) => {
